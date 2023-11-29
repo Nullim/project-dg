@@ -11,6 +11,8 @@
         <members>Client__c.Phone__c</members>
         <members>Client__c.Address__c</members>
         <members>Client__c.Client_Number__c</members>
+        <members>Client__c.Legal_Advisor__c</members>
+        <members>Client__c.Client_Identifier__c</members>
         <name>CustomField</name>
     </types>
     <types>
