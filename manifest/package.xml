@@ -13,12 +13,17 @@
         <members>Client__c.Client_Number__c</members>
         <members>Client__c.Legal_Advisor__c</members>
         <members>Client__c.Client_Identifier__c</members>
+        <members>Client__c.Added_by_Admin__c</members>
         <name>CustomField</name>
     </types>
     <types>
         <members>Legal_Advisor__c</members>
         <members>Client__c</members>
         <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Validate_Record_Created_By_Admin</members>
+        <name>Flow</name>
     </types>
     <version>59.0</version>
 </Package>
