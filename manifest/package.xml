@@ -5,10 +5,17 @@
         <members>Legal_Advisor__c.Account_Number__c</members>
         <members>Legal_Advisor__c.Account_Status__c</members>
         <members>Legal_Advisor__c.As_of_Date__c</members>
+        <members>Client__c.First_Name__c</members>
+        <members>Client__c.Last_Name__c</members>
+        <members>Client__c.Email__c</members>
+        <members>Client__c.Phone__c</members>
+        <members>Client__c.Address__c</members>
+        <members>Client__c.Client_Number__c</members>
         <name>CustomField</name>
     </types>
     <types>
         <members>Legal_Advisor__c</members>
+        <members>Client__c</members>
         <name>CustomObject</name>
     </types>
     <version>59.0</version>
