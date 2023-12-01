@@ -2,14 +2,21 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>ucl_AccountNumberCollector</members>
+        <members>ucl_AccountNumberCollectorTest</members>
         <members>ucl_Client</members>
         <members>ucl_ClientProcessor</members>
+        <members>ucl_ClientProcessorTest</members>
         <members>ucl_ExistingAdvisorFetcher</members>
+        <members>ucl_ExistingAdvisorFetcherTest</members>
         <members>ucl_ExistingClientFetcher</members>
+        <members>ucl_ExistingClientFetcherTest</members>
         <members>ucl_HerokuIntegration</members>
+        <members>ucl_HerokuIntegrationTest</members>
         <members>ucl_LegalAdvisor</members>
         <members>ucl_LegalAdvisorParser</members>
+        <members>ucl_LegalAdvisorParserTest</members>
         <members>ucl_LegalAdvisorProcessor</members>
+        <members>ucl_LegalAdvisorProcessorTest</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -32,6 +39,11 @@
         <members>Legal_Advisor__c</members>
         <members>Client__c</members>
         <name>CustomObject</name>
+    </types>
+    <types>
+        <members>GetLegalAdvisorListResource</members>
+        <members>GetLegalAdvisorResource</members>
+        <name>StaticResource</name>
     </types>
     <types>
         <members>Validate_Record_Created_By_Admin</members>

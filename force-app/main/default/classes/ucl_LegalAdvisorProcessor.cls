@@ -15,7 +15,6 @@ public class ucl_LegalAdvisorProcessor {
                 updateExistingLegalAdvisor(importedLegalAdvisor, fetchedLegalAdvisor, legalAdvisorsToUpdate);
             }
         }
-
         return legalAdvisorsToUpdate;
     }
 
@@ -34,7 +33,7 @@ public class ucl_LegalAdvisorProcessor {
         Legal_Advisor__c fetchedLegalAdvisor,
         List<Legal_Advisor__c> legalAdvisorsToUpdate
     ) {
-        if (importedLegalAdvisor.AccountStatus == 'Disabled') {
+        if (importedLegalAdvisor.AccountStatus == 'Disabled' && fetchedLegalAdvisor.Account_Status__c != 'Disabled') {
             fetchedLegalAdvisor.Account_Status__c = 'Disabled';
             legalAdvisorsToUpdate.add(fetchedLegalAdvisor);
         } else if (fetchedLegalAdvisor.Account_Status__c != 'Disabled') {
