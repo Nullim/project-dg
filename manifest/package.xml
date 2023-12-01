@@ -17,6 +17,8 @@
         <members>ucl_LegalAdvisorParserTest</members>
         <members>ucl_LegalAdvisorProcessor</members>
         <members>ucl_LegalAdvisorProcessorTest</members>
+        <members>ucl_ParseHerokuData</members>
+        <members>ucl_ParseHerokuDataTest</members>
         <name>ApexClass</name>
     </types>
     <types>
