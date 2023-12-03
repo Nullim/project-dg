@@ -13,13 +13,15 @@ public class ucl_AccountNumberCollector {
         ucl_AccountInfo result = new ucl_AccountInfo();
 
         for (ucl_LegalAdvisor importedLegalAdvisor : importedLegalAdvisors) {
-            result.accountNumbers.add(importedLegalAdvisor.AccountNumber);
+            if (importedLegalAdvisor.AccountNumber != null) {
+                result.accountNumbers.add(importedLegalAdvisor.AccountNumber);
 
-            if (importedLegalAdvisor.Clients != null) {
-                for (ucl_Client importedClient : importedLegalAdvisor.Clients) {
-                    String clientIdentifier = importedLegalAdvisor.AccountNumber + importedClient.ClientNumber;
-                    result.clientIdentifiers.add(clientIdentifier);
-                }
+            	if (importedLegalAdvisor.Clients != null) {
+                	for (ucl_Client importedClient : importedLegalAdvisor.Clients) {
+                    	String clientIdentifier = importedLegalAdvisor.AccountNumber + importedClient.ClientNumber;
+                    	result.clientIdentifiers.add(clientIdentifier);
+                	}
+            	}
             }
         }
 

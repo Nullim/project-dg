@@ -24,11 +24,12 @@ private class ucl_LegalAdvisorParserTest {
 
     @isTest
     static void testParseLegalAdvisors() {
-        
         Test.startTest();    
         
         Test.setMock(HttpCalloutMock.class, new ucl_HerokuIntegrationMock());
-        ucl_LegalAdvisorParser.parseLegalAdvisors();
+        String result = ucl_LegalAdvisorParser.parseLegalAdvisors();
+        
+        System.assertNotEquals('No valid legal advisors found!', result, 'Failed to retrieve advisor data');
         
         List<Legal_Advisor__c> enabledLegalAdvisors = [SELECT Id, Name, Account_Number__c, (SELECT Id, Name FROM Clients__r) FROM Legal_Advisor__c];
         System.assertEquals(1, enabledLegalAdvisors.size(), 'Expected only one Legal Advisor record to be upserted');
@@ -47,7 +48,51 @@ private class ucl_LegalAdvisorParserTest {
 
         Test.stopTest();
     }
+    
+    @isTest
+    static void testHandleInvalidAdvisors() {
+        Exception receivedError;
+        Test.startTest();  
+        Test.setMock(HttpCalloutMock.class, new ucl_HerokuIntegrationFailedMock());
+        try {
+            ucl_LegalAdvisorParser.parseLegalAdvisors();
+            System.assert(false, 'Expected an exception, but it did not occur');
+        } catch (Exception e) {
+            receivedError = e;
+        }
+        Test.stopTest();
+        System.assertNotEquals(null, receivedError, 'An exception was expected but did not occur');
+    }
 
+    @isTest
+    static void testHandleAdvisorFailedUpsert() {
+        Exception receivedError;
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new ucl_HerokuIntegrationInvalidAdvisorsMock());
+        try {
+            ucl_LegalAdvisorParser.parseLegalAdvisors();
+            System.assert(false, 'Expected an exception, but it did not occur');
+        } catch (Exception e) {
+            receivedError = e;
+        }
+        Test.stopTest();
+        System.assertNotEquals(null, receivedError, 'An exception was expected but did not occur');
+    }
+    @isTest
+    static void testHandleClientFailedUpsert() {
+        Exception receivedError;
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new ucl_HerokuIntegrationInvalidClientsMock());
+        try {
+            ucl_LegalAdvisorParser.parseLegalAdvisors();
+            System.assert(false, 'Expected an exception, but it did not occur');
+        } catch (Exception e) {
+            receivedError = e;
+        }
+        Test.stopTest();
+        System.assertNotEquals(null, receivedError, 'An exception was expected but did not occur');
+    }
+    
     private class ucl_HerokuIntegrationMock implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
             String jsonResponse = '[{"AccountNumber":"a209ebbb-39c6-4852-8732-82237c0674fb","AccountName":"Fadeo","AccountStatus":"Disabled","AsOfDate":"2/20/2019","Clients":[{"FirstName":"Fran","LastName":"Ruddick","Email":"fruddick0@issuu.com","Phone":"390-285-2477","Address":"434 Maple Drive","ClientNumber":"12afa152-8115-492b-bb49-87399ab49af8"},{"FirstName":"Merrel","LastName":"Hewes","Email":"mhewes1@paypal.com","Phone":"246-738-5648","Address":"003 Moland Way","ClientNumber":"735add3a-0684-4bd9-beda-04dfb7575ed9"}]},{"AccountNumber":"d5fb601e-a697-4b4e-b88a-2d8adc1639e0","AccountName":"Yabox","AccountStatus":"Enabled","AsOfDate":"3/21/2019","Clients":[{"FirstName":"Konstantin","LastName":"Grinham","Email":"kgrinham0@dagondesign.com","Phone":"384-281-5985","Address":"0 Raven Way","ClientNumber":"fd59a784-d763-4679-96a2-a9696b064762"},{"FirstName":"Phillie","LastName":"Sivyer","Email":"psivyer1@pagesperso-orange.fr","Phone":"188-835-2178","Address":"6 Kings Alley","ClientNumber":"19b69131-9216-4545-a096-138b62c14e14"}]}]';
@@ -59,4 +104,36 @@ private class ucl_LegalAdvisorParserTest {
             return res;
         }    
     }
+    
+    private class ucl_HerokuIntegrationFailedMock implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            String jsonResponse = '';
+            HTTPResponse res = new HTTPResponse();
+            res.setBody(jsonResponse);
+            res.setStatusCode(404);
+
+            return res;
+        }    
+    }
+    private class ucl_HerokuIntegrationInvalidAdvisorsMock implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            String jsonResponse = '[{"AccountNumber": "WeAreMissingFields!"}]';
+            HTTPResponse res = new HTTPResponse();
+            res.setBody(jsonResponse);
+            res.setStatusCode(200);
+
+            return res;
+        }    
+    }
+    private class ucl_HerokuIntegrationInvalidClientsMock implements HttpCalloutMock {
+        public HTTPResponse respond(HTTPRequest req) {
+            String jsonResponse = '[{"AccountNumber":"d5fb601e-a697-4b4e-b88a-2d8adc1639e0","AccountName":"Yabox","AccountStatus":"Enabled","AsOfDate":"3/21/2019","Clients":[{"ClientNumber":"I am invalid!"}]}]';
+            HTTPResponse res = new HTTPResponse();
+            res.setBody(jsonResponse);
+            res.setStatusCode(200);
+            return res;
+        }    
+    }
+    
+    
 }

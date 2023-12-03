@@ -11,8 +11,8 @@ public class ucl_HerokuIntegration {
             String responseData = response.getBody();
             return ucl_HerokuIntegration.deserializeJSONString(responseData);
         } else {
-            String errorMessage = 'Error: ' + response.getStatusCode() + ' ' + response.getStatus();
-            return null;
+            String errorMessage = 'Error code: ' + response.getStatusCode() + ', Status: ' + response.getStatus();
+            throw new AuraHandledException(errorMessage);
         }
     }
     private static List<ucl_LegalAdvisor> deserializeJSONString(String incomingJSON) {

@@ -1,67 +1,86 @@
 public class ucl_LegalAdvisorParser {
-    public static List<ucl_LegalAdvisor> getHerokuData() {
-        return ucl_HerokuIntegration.getHerokuData();
-    }
-    public static void parseLegalAdvisors() {
-        List<ucl_LegalAdvisor> importedLegalAdvisors = getHerokuData();
-        if (importedLegalAdvisors != null) {
-            // Collect Account and clientIdentifiers from imported data
-            ucl_AccountNumberCollector.ucl_AccountInfo result = ucl_AccountNumberCollector.collectAccountNumbers(importedLegalAdvisors);
-            Set<String> accountNumbers = result.accountNumbers;
-            Set<String> clientIdentifiers = result.clientIdentifiers;
+    @AuraEnabled
+    public static String parseLegalAdvisors() {
+        List<ucl_LegalAdvisor> importedLegalAdvisors = new List<ucl_LegalAdvisor>();
+        // Fetch Legal Advisors and Clients from Heroku
+        try {
+            importedLegalAdvisors = ucl_HerokuIntegration.getHerokuData();
+        } catch (Exception e) {
+            throw new AuraHandledException('Failed to retrieve Heroku data: ' + e.getMessage());
+        }
 
-            // Fetch existing Legal Advisors
-            Map<String, Legal_Advisor__c> fetchedLegalAdvisorMap = new Map<String, Legal_Advisor__c>();
-            ucl_ExistingAdvisorFetcher.fetchAdvisors(fetchedLegalAdvisorMap);
-            // Fetch existing Clients based on Client Identifiers
-            Map<String, Client__c> fetchedClientMap = new Map<String, Client__c>();
-            ucl_ExistingClientFetcher.fetchClients(fetchedClientMap, clientIdentifiers);
+        // Collect Account and clientIdentifiers from imported data
+        ucl_AccountNumberCollector.ucl_AccountInfo result = ucl_AccountNumberCollector.collectAccountNumbers(importedLegalAdvisors);
 
-            // Process Legal Advisors to be upserted
-            List<Legal_Advisor__c> legalAdvisorToUpdate = ucl_LegalAdvisorProcessor.processLegalAdvisors(importedLegalAdvisors, fetchedLegalAdvisorMap);
+        Set<String> accountNumbers = result.accountNumbers;
+        Set<String> clientIdentifiers = result.clientIdentifiers;
 
-            // Perform Legal Advisor upsert and retrieve them
-            Map<String, Legal_Advisor__c> updatedLegalAdvisorMap = ucl_LegalAdvisorParser.performAdvisorDMLOperations(legalAdvisorToUpdate);
+        // Fetch existing Legal Advisors
+        Map<String, Legal_Advisor__c> fetchedLegalAdvisorMap = new Map<String, Legal_Advisor__c>();
+        ucl_ExistingAdvisorFetcher.fetchAdvisors(fetchedLegalAdvisorMap);
 
-            // Process Clients to be upserted
-            List<Client__c> clientsToUpdate = ucl_ClientProcessor.processLegalAdvisorClients(
+        // Fetch existing Clients based on Client Identifiers
+        Map<String, Client__c> fetchedClientMap = new Map<String, Client__c>();
+        ucl_ExistingClientFetcher.fetchClients(fetchedClientMap, clientIdentifiers);
+
+        // Process Legal Advisors to be upserted
+        List<Legal_Advisor__c> legalAdvisorsToUpdate = new List<Legal_Advisor__c>();
+        try {
+            legalAdvisorsToUpdate = ucl_LegalAdvisorProcessor.processLegalAdvisors(importedLegalAdvisors, fetchedLegalAdvisorMap);
+        } catch (Exception e) {
+            throw new AuraHandledException('Failed to process Legal Advisors: ' + e.getMessage());
+        }
+
+        // Perform Legal Advisor upsert and retrieve them
+        Map<String, Legal_Advisor__c> updatedLegalAdvisorMap = performAdvisorDMLOperations(legalAdvisorsToUpdate);
+        Integer legalAdvisorsUpserted = updatedLegalAdvisorMap.size();
+
+        // Process Clients to be upserted
+        List<Client__c> clientsToUpdate = new List<Client__c>();
+        try {
+            clientsToUpdate = ucl_ClientProcessor.processLegalAdvisorClients(
                 importedLegalAdvisors,
                 updatedLegalAdvisorMap,
                 fetchedClientMap
             );
-
-            // Collect Client Identifiers to identify incoming clients
-            Set<String> incomingClientIdentifiers = ucl_ClientProcessor.collectClientIdentifiers(importedLegalAdvisors);
-
-            // Select clients that are missing from the incoming JSON Data
-            List<Client__c> clientsToDelete = ucl_LegalAdvisorParser.identifyMissingClients(incomingClientIdentifiers, fetchedLegalAdvisorMap);
-
-            // Perform Client upsert and delete clients that are not in the incoming Client data
-            performClientDMLOperations(clientsToUpdate, clientsToDelete);
+        } catch (Exception e) {
+            throw new AuraHandledException('Failed to process Clients: ' + e.getMessage());
         }
+
+        // Collect Client Identifiers to identify incoming clients
+        Set<String> incomingClientIdentifiers = ucl_ClientProcessor.collectClientIdentifiers(importedLegalAdvisors);
+
+        // Select clients that are missing from the incoming JSON Data
+        List<Client__c> clientsToDelete = identifyMissingClients(incomingClientIdentifiers, fetchedLegalAdvisorMap);
+
+        // Perform Client upsert and delete clients that are not in the incoming Client data
+        performClientDMLOperations(clientsToUpdate, clientsToDelete);
+
+        Integer clientsUpserted = clientsToUpdate.size();
+        Integer clientsDeleted = clientsToDelete.size();
+        return 'Operations Successful! Retrieved data for ' + legalAdvisorsUpserted + ' advisors and ' + clientsUpserted + ' clients and deleted ' + clientsDeleted + ' unidentified clients';
     }
 
     private static List<Client__c> identifyMissingClients(
-            Set<String> clientIdentifiers,
-            Map<String, Legal_Advisor__c> existingLegalAdvisorMap
+        Set<String> clientIdentifiers,
+        Map<String, Legal_Advisor__c> existingLegalAdvisorMap
     ) {
         List<Client__c> clientsSelectedForDeletion = new List<Client__c>();
         List<Client__c> clientsToDeleteQuery = [
-                SELECT Id
-                FROM Client__c
-                WHERE Legal_Advisor__c IN :existingLegalAdvisorMap.values()
-                        AND Client_Identifier__c NOT IN :clientIdentifiers
-                        AND Added_by_Admin__c = false
+            SELECT Id
+            FROM Client__c
+            WHERE Legal_Advisor__c IN :existingLegalAdvisorMap.values()
+            AND Client_Identifier__c NOT IN :clientIdentifiers
+            AND Added_by_Admin__c = false
         ];
         clientsSelectedForDeletion.addAll(clientsToDeleteQuery);
         return clientsSelectedForDeletion;
     }
 
     private static void performClientDMLOperations(
-            List<Client__c> updatedClients,
-            List<Client__c> deletionClients
+        List<Client__c> updatedClients,
+        List<Client__c> deletionClients
     ) {
-
         if (!updatedClients.isEmpty()) {
             upsert updatedClients;
         }

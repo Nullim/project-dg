@@ -21,8 +21,13 @@ private class ucl_HerokuIntegrationTest {
     	mock.setStatusCode(500);
     	Test.setMock(HttpCalloutMock.class, mock);
 
-    	List<ucl_LegalAdvisor> result = ucl_HerokuIntegration.getHerokuData();
-
-    	System.assertEquals(null, result, 'The callout did not handle the error properly.');
+        Exception receivedError;
+        try {
+            ucl_HerokuIntegration.getHerokuData();
+            System.assert(false, 'Expected an exception, but it did not occur');
+        } catch (Exception e) {
+            receivedError = e;
+        }
+    	System.assertNotEquals(null, receivedError, 'The callout did not handle the error properly.');
     }
 }

@@ -41,6 +41,10 @@ public class ucl_ClientProcessor {
     }
     
     private static Client__c createNewClient(ucl_Client importedClient, Legal_Advisor__c updatedLegalAdvisor) {
+        if (String.IsBlank(importedClient.LastName) ||
+            String.IsBlank(importedClient.Email)) {
+            throw new AuraHandledException('Failed to create Client: The imported Client is missing required fields.');
+        }
         return new Client__c(
             First_Name__c = importedClient.FirstName,
             Last_Name__c = importedClient.LastName,

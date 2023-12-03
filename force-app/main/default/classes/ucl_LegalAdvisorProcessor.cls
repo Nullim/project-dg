@@ -19,6 +19,9 @@ public class ucl_LegalAdvisorProcessor {
     }
 
     private static Legal_Advisor__c createNewLegalAdvisor(ucl_LegalAdvisor importedLegalAdvisor) {
+        if (String.IsBlank(importedLegalAdvisor.AccountName)) {
+            throw new AuraHandledException('Failed to create Legal Advisor: The imported Legal Advisor is missing a name.');
+        }
         return new Legal_Advisor__c(
             Account_Number__c = importedLegalAdvisor.AccountNumber,
             Account_Name__c = importedLegalAdvisor.AccountName,
