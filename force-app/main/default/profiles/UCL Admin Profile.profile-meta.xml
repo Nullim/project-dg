@@ -148,6 +148,10 @@
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
+        <tab>Heroku_Integration_Page</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
         <tab>Legal_Advisor__c</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>

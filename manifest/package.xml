@@ -46,7 +46,12 @@
     <types>
         <members>Client__c</members>
         <members>Legal_Advisor__c</members>
+        <members>Heroku_Integration_Page</members>
         <name>CustomTab</name>
+    </types>
+    <types>
+        <members>retrieveLegalAdvisors</members>
+        <name>LightningComponentBundle</name>
     </types>
     <types>
         <members>Legal_Advisor__c-Legal Advisor Layout</members>
@@ -64,6 +69,7 @@
     </types>
     <types>
         <members>Universal_Containers_Lawyers_app_UtilityBar</members>
+        <members>Heroku_Integration_Page</members>
         <name>FlexiPage</name>
     </types>
     <types>
