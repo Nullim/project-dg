@@ -48,6 +48,7 @@ public class ucl_ClientProcessor {
             Email__c = importedClient.Email,
             Phone__c = importedClient.Phone,
             Address__c = importedClient.Address,
+            Added_by_Admin__c = false,
             Legal_Advisor__c = updatedLegalAdvisor.Id,
             Client_Number__c = importedClient.ClientNumber
         );

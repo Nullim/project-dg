@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Added_by_Admin__c</fullName>
-    <defaultValue>false</defaultValue>
+    <defaultValue>true</defaultValue>
     <description>If checked, this client was added by an Admin and will not be deleted by the nightly service.</description>
     <externalId>false</externalId>
     <label>Added by Admin</label>

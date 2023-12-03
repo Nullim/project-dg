@@ -27,12 +27,12 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>Legal_Advisor__c.Account_Status__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
+        <editable>true</editable>
         <field>Legal_Advisor__c.As_of_Date__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -43,7 +43,7 @@
         <allowDelete>true</allowDelete>
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
-        <modifyAllRecords>true</modifyAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
         <object>Client__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
@@ -52,7 +52,7 @@
         <allowDelete>true</allowDelete>
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
-        <modifyAllRecords>true</modifyAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
         <object>Legal_Advisor__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#8331E1</headerColor>
+        <shouldOverrideOrgTheme>true</shouldOverrideOrgTheme>
+    </brand>
+    <description>Universal Containers Lawyers is a company that provides legal advisory to their customers.</description>
+    <formFactors>Small</formFactors>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <isNavTabPersistenceDisabled>false</isNavTabPersistenceDisabled>
+    <label>Universal Containers Lawyers app</label>
+    <navType>Standard</navType>
+    <tabs>Legal_Advisor__c</tabs>
+    <tabs>Client__c</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>Universal_Containers_Lawyers_app_UtilityBar</utilityBar>
+</CustomApplication>

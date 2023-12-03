@@ -16,6 +16,7 @@ private class ucl_LegalAdvisorParserTest {
             First_Name__c = 'David',
             Last_Name__c = 'Martinez',
             Email__c = 'dmartinez0@edgerunner.nc',
+            Added_by_Admin__c = false,
             Legal_Advisor__c = advisor.Id
         );
         insert existingClient;

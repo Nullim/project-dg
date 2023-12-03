@@ -22,10 +22,16 @@
         <name>ApexClass</name>
     </types>
     <types>
+        <members>Legal_Advisor__c</members>
+        <members>Client__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
         <members>Legal_Advisor__c.Account_Name__c</members>
         <members>Legal_Advisor__c.Account_Number__c</members>
         <members>Legal_Advisor__c.Account_Status__c</members>
         <members>Legal_Advisor__c.As_of_Date__c</members>
+        <members>Legal_Advisor__c.Number_of_Clients__c</members>
         <members>Client__c.First_Name__c</members>
         <members>Client__c.Last_Name__c</members>
         <members>Client__c.Email__c</members>
@@ -38,9 +44,27 @@
         <name>CustomField</name>
     </types>
     <types>
-        <members>Legal_Advisor__c</members>
         <members>Client__c</members>
-        <name>CustomObject</name>
+        <members>Legal_Advisor__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>Legal_Advisor__c-Legal Advisor Layout</members>
+        <members>Client__c-Client Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+      <members>Legal_Advisor__c.All</members>
+      <members>Client__c.All</members>
+      <name>ListView</name>
+    </types>
+    <types>
+        <members>Universal_Containers_Lawyers_app</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Universal_Containers_Lawyers_app_UtilityBar</members>
+        <name>FlexiPage</name>
     </types>
     <types>
         <members>GetLegalAdvisorListResource</members>
@@ -48,16 +72,21 @@
         <name>StaticResource</name>
     </types>
     <types>
-        <members>Validate_Record_Created_By_Admin</members>
-        <name>Flow</name>
-    </types>
-    <types>
         <members>Legal_Advisor_List</members>
         <name>RemoteSiteSetting</name>
     </types>
     <types>
         <members>Admin</members>
+        <members>UCL Admin Profile</members>
         <name>Profile</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>ProfileSessionSetting</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>ProfilePasswordPolicy</name>
     </types>
     <types>
         <members>UCL_Admin</members>
