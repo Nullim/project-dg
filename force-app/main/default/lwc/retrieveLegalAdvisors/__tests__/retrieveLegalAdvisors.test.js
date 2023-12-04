@@ -68,7 +68,6 @@ describe('c-retrieve-legal-advisors', () => {
     await flushPromises();
     expect(handler).toHaveBeenCalled();
     const toastEvent = handler.mock.calls[0][0];
-    console.log('What is toast? ' + toastEvent);
     expect(toastEvent.detail.title).toBe(TOAST_TITLE);
     expect(toastEvent.detail.message).toBe(TOAST_MESSAGE);
     expect(toastEvent.detail.variant).toBe(TOAST_VARIANT);
