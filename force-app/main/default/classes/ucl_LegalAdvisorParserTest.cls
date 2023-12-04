@@ -51,46 +51,29 @@ private class ucl_LegalAdvisorParserTest {
     
     @isTest
     static void testHandleInvalidAdvisors() {
-        Exception receivedError;
         Test.startTest();  
         Test.setMock(HttpCalloutMock.class, new ucl_HerokuIntegrationFailedMock());
-        try {
-            ucl_LegalAdvisorParser.parseLegalAdvisors();
-            System.assert(false, 'Expected an exception, but it did not occur');
-        } catch (Exception e) {
-            receivedError = e;
-        }
+        String result = ucl_LegalAdvisorParser.parseLegalAdvisors();
         Test.stopTest();
-        System.assertNotEquals(null, receivedError, 'An exception was expected but did not occur');
+        
+        System.assertEquals('Failed to retrieve Heroku data', result, 'An exception was expected but did not occur');
     }
 
     @isTest
-    static void testHandleAdvisorFailedUpsert() {
-        Exception receivedError;
+    static void testHandleAdvisorFailedProcessing() {
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new ucl_HerokuIntegrationInvalidAdvisorsMock());
-        try {
-            ucl_LegalAdvisorParser.parseLegalAdvisors();
-            System.assert(false, 'Expected an exception, but it did not occur');
-        } catch (Exception e) {
-            receivedError = e;
-        }
+        String result = ucl_LegalAdvisorParser.parseLegalAdvisors();
         Test.stopTest();
-        System.assertNotEquals(null, receivedError, 'An exception was expected but did not occur');
+        System.assertEquals('Failed to process Legal Advisors', result, 'An exception was expected but did not occur');
     }
     @isTest
-    static void testHandleClientFailedUpsert() {
-        Exception receivedError;
+    static void testHandleClientFailedProcessing() {
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new ucl_HerokuIntegrationInvalidClientsMock());
-        try {
-            ucl_LegalAdvisorParser.parseLegalAdvisors();
-            System.assert(false, 'Expected an exception, but it did not occur');
-        } catch (Exception e) {
-            receivedError = e;
-        }
+        String result = ucl_LegalAdvisorParser.parseLegalAdvisors();
         Test.stopTest();
-        System.assertNotEquals(null, receivedError, 'An exception was expected but did not occur');
+        System.assertEquals('Failed to process Clients', result, 'An exception was expected but did not occur');
     }
     
     private class ucl_HerokuIntegrationMock implements HttpCalloutMock {
@@ -117,7 +100,7 @@ private class ucl_LegalAdvisorParserTest {
     }
     private class ucl_HerokuIntegrationInvalidAdvisorsMock implements HttpCalloutMock {
         public HTTPResponse respond(HTTPRequest req) {
-            String jsonResponse = '[{"AccountNumber": "WeAreMissingFields!"}]';
+            String jsonResponse = '[{"AccountNumber": 2}]';
             HTTPResponse res = new HTTPResponse();
             res.setBody(jsonResponse);
             res.setStatusCode(200);

@@ -1,12 +1,14 @@
 public class ucl_LegalAdvisorParser {
     @AuraEnabled
     public static String parseLegalAdvisors() {
+        ucl_LogException logger = new ucl_LogException();
         List<ucl_LegalAdvisor> importedLegalAdvisors = new List<ucl_LegalAdvisor>();
         // Fetch Legal Advisors and Clients from Heroku
         try {
             importedLegalAdvisors = ucl_HerokuIntegration.getHerokuData();
         } catch (Exception e) {
-            throw new AuraHandledException('Failed to retrieve Heroku data: ' + e.getMessage());
+            logger.log(e);
+            return 'Failed to retrieve Heroku data';
         }
 
         // Collect Account and clientIdentifiers from imported data
@@ -28,7 +30,8 @@ public class ucl_LegalAdvisorParser {
         try {
             legalAdvisorsToUpdate = ucl_LegalAdvisorProcessor.processLegalAdvisors(importedLegalAdvisors, fetchedLegalAdvisorMap);
         } catch (Exception e) {
-            throw new AuraHandledException('Failed to process Legal Advisors: ' + e.getMessage());
+            logger.log(e);
+            return 'Failed to process Legal Advisors';
         }
 
         // Perform Legal Advisor upsert and retrieve them
@@ -44,7 +47,8 @@ public class ucl_LegalAdvisorParser {
                 fetchedClientMap
             );
         } catch (Exception e) {
-            throw new AuraHandledException('Failed to process Clients: ' + e.getMessage());
+            logger.log(e);
+            return 'Failed to process Clients';
         }
 
         // Collect Client Identifiers to identify incoming clients

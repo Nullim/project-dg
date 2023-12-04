@@ -6,12 +6,11 @@ export default class RetrieveLegalAdvisors extends LightningElement {
   handleClick() {
     parseLegalAdvisors()
       .then(result => {
-        if (result && typeof result === 'string') {
+        if (result.startsWith('Operations')) {
           this.showToast('Success', result, 'success');
+        } else {
+          this.showToast('Error', result, 'error');
         }
-      })
-      .catch(error => {
-        this.showToast('Error', error.body.message, 'error');
       })
   }
 

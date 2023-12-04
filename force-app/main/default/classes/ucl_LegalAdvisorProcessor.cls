@@ -10,7 +10,9 @@ public class ucl_LegalAdvisorProcessor {
 
             if (fetchedLegalAdvisor == null && importedLegalAdvisor.AccountStatus != 'Disabled') {
                 Legal_Advisor__c newLegalAdvisor = createNewLegalAdvisor(importedLegalAdvisor);
-                legalAdvisorsToUpdate.add(newLegalAdvisor);
+                if (newLegalAdvisor != null) {
+                    legalAdvisorsToUpdate.add(newLegalAdvisor);
+                }
             } else if (fetchedLegalAdvisor != null) {
                 updateExistingLegalAdvisor(importedLegalAdvisor, fetchedLegalAdvisor, legalAdvisorsToUpdate);
             }
@@ -20,7 +22,7 @@ public class ucl_LegalAdvisorProcessor {
 
     private static Legal_Advisor__c createNewLegalAdvisor(ucl_LegalAdvisor importedLegalAdvisor) {
         if (String.IsBlank(importedLegalAdvisor.AccountName)) {
-            throw new AuraHandledException('Failed to create Legal Advisor: The imported Legal Advisor is missing a name.');
+            throw new AuraHandledException('Failed to insert Legal Advisor due to invalid account name');
         }
         return new Legal_Advisor__c(
             Account_Number__c = importedLegalAdvisor.AccountNumber,

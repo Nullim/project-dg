@@ -1,12 +1,12 @@
 import { createElement } from 'lwc';
 import RetrieveLegalAdvisors from 'c/retrieveLegalAdvisors';
 import parseLegalAdvisors from '@salesforce/apex/ucl_LegalAdvisorParser.parseLegalAdvisors';
+import { ShowToastEventName } from 'lightning/platformShowToastEvent';
 
-jest.mock('@salesforce/apex/ucl_LegalAdvisorParser.parseLegalAdvisors', () => {
-  return {
-    default: jest.fn()
-  };
-}), { virtual: true };
+jest.mock('@salesforce/apex/ucl_LegalAdvisorParser.parseLegalAdvisors', () => ({
+  default: jest.fn()
+}), { virtual: true });
+
 
 describe('c-retrieve-legal-advisors', () => {
   afterEach(() => {
