@@ -1,0 +1,26 @@
+[
+  {
+    "AccountNumber": "9afccdd3-e7c4-4789-a465-1734886633d2",
+    "AccountName": "Centidel",
+    "AccountStatus": "Enabled",
+    "AsOfDate": "2/13/2019",
+    "Clients": [
+      {
+        "FirstName": "Foster",
+        "LastName": "Burn",
+        "Email": "fburn0@nydailynews.com",
+        "Phone": "425-154-5410",
+        "Address": "49018 Bashford Road",
+        "ClientNumber": "b4110a35-7ca3-4a53-8d94-ea78c5489052"
+      },
+      {
+        "FirstName": "Minetta",
+        "LastName": "Pol",
+        "Email": "mpol1@thetimes.co.uk",
+        "Phone": "704-528-1659",
+        "Address": "21 Lukken Drive",
+        "ClientNumber": "c0c93578-6bbf-4bcc-a786-4d1e45ea0c96"
+      }
+    ]
+  }
+]
